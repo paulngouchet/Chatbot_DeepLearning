@@ -2,11 +2,9 @@
 import nltk
 from nltk.stem.lancaster import LancasterStemmer
 stemmer = LancasterStemmer()
-
 import sys
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
-
 # restore all of our data structures
 import pickle
 data = pickle.load( open("training_data", "rb" ) )
@@ -14,7 +12,6 @@ words = data['words']
 classes = data['classes']
 train_x = data['train_x']
 train_y = data['train_y']
-
 # things we need for Tensorflow
 import numpy as np
 import tensorflow as tf
@@ -26,13 +23,10 @@ with open("contexts.json") as json_data:
     contexts = json.load(json_data)
 
 sess = tf.InteractiveSession()
-
 new_saver = tf.train.import_meta_graph("saved_chatbot.ckpt.meta")
 new_saver.restore(sess, "saved_chatbot.ckpt")
-
 data_in = sess.graph.get_tensor_by_name("input:0")
 predict_op = sess.graph.get_tensor_by_name("output:0")
-
 
 #print('checkpoint')
 def clean_up_sentence(sentence):
@@ -54,9 +48,7 @@ def bow(sentence, words, show_details=False):
                 bag[i] = 1
                 if show_details:
                     print ("found in bag: %s" % w)
-
     return(np.array(bag))
-
 
 ERROR_THRESHOLD = 0.25
 def classify(sentence):
@@ -88,7 +80,6 @@ def response(sentence, userID='123', show_details=False):
                     # a random response from the intent
                     print(random.choice(i['responses']))
                     return 1
-
             results.pop(0)
 
 question = input("Hodor! Welcome! You can ask me any question about the hotel. Just enter 'bye' when you want to leave.\n\n")
