@@ -1,13 +1,12 @@
 # things we need for NLP
 import nltk
-from nltk.stem.lancaster import LancasterStemmer
-stemmer = LancasterStemmer()
-# things we need for Tensorflow
 import numpy as np
 import tensorflow as tf
 import random
-# import our chat-bot contexts file
 import json
+from nltk.stem.lancaster import LancasterStemmer
+
+stemmer = LancasterStemmer()
 with open('contexts.json') as json_data:
     contexts = json.load(json_data)
 
@@ -15,6 +14,7 @@ words = []
 classes = []
 documents = []
 ignore_words = ['?']
+
 # loop through each sentence in our contexts patterns
 for intent in contexts['contexts']:
     for pattern in intent['patterns']:
@@ -42,6 +42,7 @@ training = []
 output = []
 # create an empty array for our output
 output_empty = [0] * len(classes)
+
 # training set, bag of words for each sentence
 for doc in documents:
     # initialize our bag of words
