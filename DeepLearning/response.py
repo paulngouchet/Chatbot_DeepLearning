@@ -1,24 +1,25 @@
 # things we need for NLP
 import nltk
-from nltk.stem.lancaster import LancasterStemmer
-stemmer = LancasterStemmer()
+import pickle
 import sys
 import os
+import numpy as np
+import tensorflow as tf
+import random
+# import our chat-bot contexts file
+import json
+from nltk.stem.lancaster import LancasterStemmer
+
+stemmer = LancasterStemmer()
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 # restore all of our data structures
-import pickle
 data = pickle.load( open("training_data", "rb" ) )
 words = data['words']
 classes = data['classes']
 train_x = data['train_x']
 train_y = data['train_y']
 # things we need for Tensorflow
-import numpy as np
-import tensorflow as tf
-import random
 
-# import our chat-bot contexts file
-import json
 with open("contexts.json") as json_data:
     contexts = json.load(json_data)
 
@@ -42,6 +43,7 @@ def bow(sentence, words, show_details=False):
     sentence_words = clean_up_sentence(sentence)
     # bag of words
     bag = [0]*len(words)
+    
     for s in sentence_words:
         for i,w in enumerate(words):
             if w == s:
@@ -60,6 +62,7 @@ def classify(sentence):
     # sort by strength of probability
     results.sort(key=lambda x: x[1], reverse=True)
     return_list = []
+    
     for r in results:
         return_list.append((classes[r[0]], r[1]))
     # return tuple of intent and probability
@@ -67,6 +70,7 @@ def classify(sentence):
 
 def response(sentence, userID='123', show_details=False):
     results = classify(sentence)
+    
     if show_details:
         print(results)
     # if we have a classification then find the matching intent tag
